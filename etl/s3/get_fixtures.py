@@ -9,7 +9,6 @@ from os import environ
 from api_calls import (
     api_call_get_current_round,
     api_call_get_fixtures_for_current_round,
-    s3_upload_df_to_bucket,
 )
 
 # Load .env
@@ -144,4 +143,5 @@ def test_transform():
     print(json_object["fixture"])
 
 
-check_current_round_for_changes()
+if __name__ == "__main__":
+    check_current_round_for_changes()
