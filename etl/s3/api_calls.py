@@ -9,7 +9,7 @@ from io import StringIO
 from prefect.blocks.system import Secret
 
 load_env()
-api_key_rapid = Secret.load("rapid_api_key")
+api_key_rapid = Secret.load("rapid-api-key")
 s3_bucket_name = Secret.load("s3-bucket-name")
 headers = {
     "X-RapidAPI-Key": api_key_rapid,
@@ -78,7 +78,7 @@ def s3_upload_df_to_bucket(df: pd.DataFrame):
 
     key = s3_upload(
         data=csv_buffer,
-        bucket=environ["S3_BUCKET_NAME"],
+        bucket=s3_bucket_name,
         aws_credentials=credentials,
     )
     _logger.info(f"Upload of the df-file to s3bucket successful. Key: {key}")

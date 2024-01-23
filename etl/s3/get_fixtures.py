@@ -6,6 +6,7 @@ from standard_functions import load_env, authenticate_aws
 from prefect import flow, get_run_logger, task
 import pandas as pd
 from os import environ
+from prefect.blocks.system import Secret
 from api_calls import (
     api_call_get_current_round,
     api_call_get_fixtures_for_current_round,
@@ -14,6 +15,7 @@ from api_calls import (
 # Load .env
 load_env()
 old_current_round = None
+s3_bucket_name = Secret.load("s3-bucket-name")
 
 
 # classes
@@ -55,7 +57,7 @@ def check_current_round_for_changes():
         df.to_csv(csv_buffer)
         key = s3_upload(
             data=csv_buffer.read(),
-            bucket=environ["S3_BUCKET_NAME"],
+            bucket=s3_bucket_name,
             aws_credentials=credentials,
             key="fixture_data_from_current_round.csv",
         )
@@ -69,7 +71,7 @@ def check_current_round_for_changes():
         df.to_csv(csv_buffer)
         key = s3_upload(
             data=csv_buffer.read(),
-            bucket=environ["S3_BUCKET_NAME"],
+            bucket=s3_bucket_name,
             aws_credentials=credentials,
             key="fixture_data_from_current_round.csv",
         )
