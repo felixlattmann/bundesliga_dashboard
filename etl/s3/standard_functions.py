@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 from os.path import abspath, join, dirname
 from prefect_aws import AwsCredentials
+from os import environ
 
 
 def load_env():
@@ -9,4 +10,4 @@ def load_env():
 
 
 def authenticate_aws() -> AwsCredentials:
-    return AwsCredentials.load("aws-login")
+    return AwsCredentials.load(environ["PREFECT_BLOCK_AWS_NAME"])
