@@ -6,10 +6,13 @@ from standard_functions import load_env, authenticate_aws
 from prefect_aws.s3 import s3_upload
 import pandas as pd
 from io import StringIO
+from prefect.blocks.system import Secret
 
 load_env()
+api_key_rapid = Secret.load("rapid_api_key")
+s3_bucket_name = Secret.load("s3-bucket-name")
 headers = {
-    "X-RapidAPI-Key": environ["RAPID_API_KEY"],
+    "X-RapidAPI-Key": api_key_rapid,
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
 }
 
@@ -46,7 +49,7 @@ async def load_json_into_s3_bucket():
     credentials = authenticate_aws()
     async with open("temp.json", "rb") as file:
         key = await s3_upload(
-            bucket=environ["S3_BUCKET_NAME"],
+            bucket=s3_bucket_name,
             key="temp.json",
             data=file.read(),
             aws_credentials=credentials,
@@ -60,7 +63,7 @@ def s3_test():
     with open("temp.json", "rb") as file:
         key = s3_upload(
             data=file.read(),
-            bucket=environ["S3_BUCKET_NAME"],
+            bucket=s3_bucket_name,
             aws_credentials=credentials,
         )
     _logger.info(f"Successful upload with key: {key}")

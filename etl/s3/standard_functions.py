@@ -10,4 +10,4 @@ def load_env():
 
 
 def authenticate_aws() -> AwsCredentials:
-    return AwsCredentials.load(environ["PREFECT_BLOCK_AWS_NAME"])
+    return AwsCredentials.load("aws-login")
