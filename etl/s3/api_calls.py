@@ -12,7 +12,7 @@ load_env()
 api_key_rapid = Secret.load("rapid-api-key")
 s3_bucket_name = Secret.load("s3-bucket-name")
 headers = {
-    "X-RapidAPI-Key": api_key_rapid,
+    "X-RapidAPI-Key": api_key_rapid.get(),
     "X-RapidAPI-Host": "api-football-v1.p.rapidapi.com",
 }
 
@@ -49,7 +49,7 @@ async def load_json_into_s3_bucket():
     credentials = authenticate_aws()
     async with open("temp.json", "rb") as file:
         key = await s3_upload(
-            bucket=s3_bucket_name,
+            bucket=s3_bucket_name.get(),
             key="temp.json",
             data=file.read(),
             aws_credentials=credentials,
@@ -63,7 +63,7 @@ def s3_test():
     with open("temp.json", "rb") as file:
         key = s3_upload(
             data=file.read(),
-            bucket=s3_bucket_name,
+            bucket=s3_bucket_name.get(),
             aws_credentials=credentials,
         )
     _logger.info(f"Successful upload with key: {key}")

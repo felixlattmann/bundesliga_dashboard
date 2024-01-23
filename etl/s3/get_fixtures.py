@@ -57,7 +57,7 @@ def check_current_round_for_changes():
         df.to_csv(csv_buffer)
         key = s3_upload(
             data=csv_buffer.read(),
-            bucket=s3_bucket_name,
+            bucket=s3_bucket_name.get(),
             aws_credentials=credentials,
             key="fixture_data_from_current_round.csv",
         )
@@ -71,7 +71,7 @@ def check_current_round_for_changes():
         df.to_csv(csv_buffer)
         key = s3_upload(
             data=csv_buffer.read(),
-            bucket=s3_bucket_name,
+            bucket=s3_bucket_name.get(),
             aws_credentials=credentials,
             key="fixture_data_from_current_round.csv",
         )
