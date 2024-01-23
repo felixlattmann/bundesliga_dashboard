@@ -2,3 +2,5 @@ numpy
 python-dotenv
 pandas
 prefect
+prefect-aws
+requests
