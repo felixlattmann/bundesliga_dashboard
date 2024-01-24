@@ -1,6 +1,6 @@
 import requests
 import json
-from prefect_aws.s3 import s3_upload
+from prefect_aws.s3 import s3_upload, S3Bucket
 from io import BytesIO
 from standard_functions import load_env, authenticate_aws
 from prefect import flow, get_run_logger, task
@@ -44,9 +44,10 @@ class FixtureData:
 # flow
 @flow
 def check_current_round_for_changes():
+    s3_bucket_name = Secret.load("s3-bucket-name")
     _logger = get_run_logger()
-    global old_current_round
-    current_round = api_call_get_current_round()
+    current_round = api_call_get_current_round(_s3_bucket)
+    old_current_round = s3_bucket_get_old_current_round_string()
 
     if old_current_round is None:
         old_current_round = current_round
@@ -84,6 +85,8 @@ def check_current_round_for_changes():
 
 
 # etl functions
+
+
 @task
 def transform_fixtures_response_to_df(res: requests.Response) -> pd.DataFrame:
     fixture_data_list = []
